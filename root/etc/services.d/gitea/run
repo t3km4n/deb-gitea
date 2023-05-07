@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv sh
+# Get a list of all environment variables and loop through them
+env | while read -r line; do
+  # Extract the variable name from the line
+  var=$(echo "$line" | cut -d= -f1)
+
+  # Export the variable
+  export "$var"
+done
+# Set the Gitea work directory
+export GITEA_WORK_DIR=/var/lib/gitea/
+exec s6-setuidgid git /usr/local/bin/gitea web --config /etc/gitea/app.ini

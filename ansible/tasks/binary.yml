@@ -1,0 +1,26 @@
+---
+- name: Create a directory
+  file:
+    path: /home/gitea/binary
+    state: directory
+    mode: "0755"
+
+- name: Download gitea binary v{{ gitea_version }}
+  get_url:
+    url: https://github.com/go-gitea/gitea/releases/download/v{{ gitea_version }}/gitea-{{ gitea_version }}-linux-amd64
+    dest: /home/gitea/binary
+    mode: 0775
+
+- name: Download gitea asc file
+  get_url:
+    url: https://github.com/go-gitea/gitea/releases/download/v{{ gitea_version }}/gitea-{{ gitea_version }}-linux-amd64.asc
+    dest: /home/gitea/binary
+
+- name: install gitea gpg key
+  command: "gpg --keyserver {{ gpg_server_gitea }} --recv {{ gpg_key_gitea }}"
+  register: gpg_install
+  changed_when: gpg_install.rc != 0
+
+- name: verify binary signature
+  command: "gpg --verify /home/gitea/binary/gitea-{{ gitea_version }}-linux-amd64.asc /home/gitea/binary/gitea-{{ gitea_version }}-linux-amd64"
+  changed_when: false

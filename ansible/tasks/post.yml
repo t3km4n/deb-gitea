@@ -1,0 +1,13 @@
+---
+
+- name: reset the permissons for gitea
+  file:
+    path: /etc/gitea
+    owner: git 
+    mode: '0750'
+
+- name: gitea config permissons
+  file:
+    path: /etc/gitea/app.ini
+    owner: git 
+    mode: '0640'

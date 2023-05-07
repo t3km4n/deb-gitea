@@ -1,0 +1,22 @@
+---
+- name: Build t3km4n Postgres
+  hosts: localhost
+  gather_facts: true 
+  become: true
+
+  pre_tasks:
+    - name: vars
+      include_vars: vars.yml
+
+    - name: cache update
+      import_tasks: pretasks.yml
+
+  tasks:
+    - name: Download and verify the binary
+      import_tasks: tasks/binary.yml
+
+    - name: Set evn for gitea
+      import_tasks: tasks/env.yml
+
+    - name: install gitea as linux service
+      import_tasks: tasks/install.yml

@@ -1,0 +1,13 @@
+---
+- hosts: localhost 
+  become: true
+
+  pre_tasks:
+  - name: Check gitea installation
+    stat:
+      path: /etc/gitea/app.ini
+    register: gitea_conf
+
+  tasks:
+  - name: post install reset permissons
+    import_tasks: tasks/post.yml

@@ -1,0 +1,31 @@
+---
+
+- name: check binary exists
+  stat:
+    path: /home/gitea/binary/gitea
+  register: binary_status
+
+- name: rename downloaded binary
+  command: "cp /home/gitea/binary/gitea-{{ gitea_version }}-linux-amd64 /home/gitea/binary/gitea"
+  changed_when: binary_status.stat.exists != true
+
+- name: check binary in global location
+  stat:
+    path: /usr/local/bin/gitea
+  register: binary_global
+
+- name: move binary to global location
+  command: "cp -f /home/gitea/binary/gitea /usr/local/bin/gitea"
+  changed_when: false
+
+- name: download config file
+  get_url:
+    url: " {{ service_config_url }} "
+    dest: /etc/systemd/system/gitea.service
+    mode: 0775
+
+- name: download example app_ini file
+  get_url:
+    url: " {{ example_app_ini_url }} "
+    dest: /etc/gitea/app.ini
+    mode: 0775
