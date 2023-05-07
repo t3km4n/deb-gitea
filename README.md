@@ -1,6 +1,6 @@
 # deb-gitea
 
-A go-gitea container using sqlite but optimized for t3km4n's needs.
+A go-gitea container using sqlite running on debian bullseye slim.
 
 ## What is Gitea?
 
@@ -16,7 +16,7 @@ Gitea is a lightweight code hosting solution. Written in Go, features low resour
 
 ## Environment Variables
 
-`GEOIP_DIR` - Env variable used mainly by the docker container to find views and static files.
+Environment variables are not used in this container for Gitea.  Instead, configure the `app.ini` file.
 
 ## Application
 

@@ -3,9 +3,6 @@ all: build run
 run: build
 	docker run -d \
 	--name deb-gitea \
-	-e GITEA_ADMIN_USER=admin \
-	-e GITEA_ADMIN_PASSWORD=admin \
-	-e GITEA_ADMIN_EMAIL=admin@localhost \
 	-e ALLOW_EMPTY_PASSWORD=no \
 	-e APP_DATA_PATH=/var/lib/gitea/data \
 	-e RUN_MODE=prod \
@@ -20,7 +17,7 @@ slim:
 	slim build --dockerfile Dockerfile --tag deb-gitea:slim .
 
 slimup:
-	docker run -d --name deb-geoip -p 3000:3000 deb-geoip:slim
+	docker run -d --name deb-gitea -p 3000:3000 deb-gitea:slim
 
 exec:
 	docker exec -it deb-gitea /bin/bash
