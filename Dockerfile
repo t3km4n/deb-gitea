@@ -21,9 +21,9 @@ COPY ansible/ /tmp/ansible/
 
 RUN tar -C / -xf /tmp/s6-overlay-${OVERLAY_ARCH}.tar.gz && \
     echo "**** install dependencies ****" && \
-    touch /etc/locale.conf && echo "LANG=en_US.UTF-8" >> /etc/locale.conf && localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     apt update && \
-    apt install -y ansible && \
+    apt install -y ansible locales && \
+    touch /etc/locale.conf && echo "LANG=en_US.UTF-8" >> /etc/locale.conf && localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     cd /tmp/ansible && \
     mkdir /etc/gitea && \
     echo "**** run ansible ****" && \
@@ -32,8 +32,9 @@ RUN tar -C / -xf /tmp/s6-overlay-${OVERLAY_ARCH}.tar.gz && \
     apt -y autoclean && \
     echo "**** run ansible cleanup ****" && \
     ansible-playbook post_install.yml && \
-    apt remove -y ansible && \
-    rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/* /home/gitea/*
+    apt remove -y --auto-remove ansible python python3 && \
+    apt purge -y --auto-remove && \
+    rm -rf /tmp/* /usr/share/* /var/lib/apt/lists/* /var/tmp/* /home/gitea/*
 
 # copy local files
 COPY root/ /
