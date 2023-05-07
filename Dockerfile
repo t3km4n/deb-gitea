@@ -11,8 +11,8 @@ ARG OVERLAY_ARCH="x86"
 
 ENV APP_VERSION="1.19.3" \
     T3KM4N_APP_NAME="gitea" \
-    LANGUAGE=en_US.UTF-8 \
-    LANG=en_US.UTF-8
+    LANGUAGE="en_US.UTF-8" \
+    LANG="en_US.UTF-8"
 
 # add s6 overlay
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${OVERLAY_VERSION}/s6-overlay-${OVERLAY_ARCH}.tar.gz /tmp
@@ -21,6 +21,7 @@ COPY ansible/ /tmp/ansible/
 
 RUN tar -C / -xf /tmp/s6-overlay-${OVERLAY_ARCH}.tar.gz && \
     echo "**** install dependencies ****" && \
+    touch /etc/locale.conf && echo "LANG=en_US.UTF-8" >> /etc/locale.conf && localedef -i en_US -f UTF-8 en_US.UTF-8 && \
     apt update && \
     apt install -y ansible && \
     cd /tmp/ansible && \
