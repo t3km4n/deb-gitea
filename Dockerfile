@@ -32,9 +32,8 @@ RUN tar -C / -xf /tmp/s6-overlay-${OVERLAY_ARCH}.tar.gz && \
     apt -y autoclean && \
     echo "**** run ansible cleanup ****" && \
     ansible-playbook post_install.yml && \
-    apt remove -y --auto-remove ansible python python3 && \
-    apt purge -y --auto-remove && \
-    rm -rf /tmp/* /usr/share/* /var/lib/apt/lists/* /var/tmp/* /home/gitea/*
+    apt remove -y ansible && \
+    rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/* /home/gitea/*
 
 # copy local files
 COPY root/ /
